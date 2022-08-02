@@ -15,10 +15,9 @@ MetroloJA is a Jupyter notebook that allows a follow-up over time of these quali
 
 ## Getting Started
 ### Installation
-The only thing to do is to click on this [link](https://mybinder.org/v2/gh/CSaint-Hilaire/MetroloJA/HEAD?urlpath=%2Fvoila%2Frender%2Fmetroloj_analyze.ipynb). 
+The only thing to do is to click on this [link](https://mybinder.org/v2/gh/CSaint-Hilaire/I_MetroloJA/HEAD?urlpath=tree%2Fmetroloj_analyze.ipynb). 
 The notebook opens in an executable environment from [Binder](https://mybinder.readthedocs.io/en/latest/), and it is converted into a standalone application using [Voilà](https://voila.readthedocs.io/en/stable/using.html). The process can take few minutes, be patient ! :laughing:
 
-If you only want to open the notebook, click on this [link](https://mybinder.org/v2/gh/CSaint-Hilaire/MetroloJA/HEAD) (opens on JupyterLab) or on this other [link](https://mybinder.org/v2/gh/CSaint-Hilaire/MetroloJA/HEAD?urlpath=tree%2Fmetroloj_analyze.ipynb) (opens on Jupyter Notebook). 
 
 ### Usage
 After loading, this web page appears :
