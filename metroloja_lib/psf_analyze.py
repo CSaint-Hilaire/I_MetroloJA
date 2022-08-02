@@ -2,7 +2,7 @@ import os, glob, pathlib, time, datetime, shutil
 import plotly.graph_objects as go
 import plotly.express as px
 import ipywidgets as widgets
-import tkinter as tk
+from ipyfilechooser import FileChooser
 import pandas as pd
 
 from alive_progress import alive_bar
@@ -513,7 +513,7 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
 
 
 
-def select_param():
+def select_param(button_boxplot):
 
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     
@@ -540,7 +540,9 @@ def select_param():
             if checkboxes[i].value == True:
                 selected_param = selected_param + [checkboxes[i].description]
         
+        button_boxplot.disabled = False
         print('OK!')
+        
 
     
     for i in range(4):
@@ -548,6 +550,7 @@ def select_param():
     button_param_selected.on_click(return_param)
     display(checkboxes_output)
     display(button_param_selected, output)
+    
 
 
     
@@ -556,17 +559,18 @@ values = {"FWHM" : "1",
               "Mes./theory resolution ratio" : "3",
               "SBR" : "4"}
 
-def display_selected_plot(df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, folder_selected, leg_dict, selected_param=selected_param, values=values):
-    widgets.ToggleButtons(
+def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, selected_param=selected_param, values=values):
+    save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
         disabled=False,
-        button_style='info', # 'success', 'info', 'warning', 'danger' or ''
+        button_style='info',
     )
+    display(save_button_selection)
 
 
 
-    if result == 'yes':
+    if save_button_selection == 'Yes':
         im_path = os.path.join(folder_selected, "pdf_result")
         
         if not os.path.exists(im_path):
@@ -609,11 +613,7 @@ def display_selected_plot(df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, folder_se
                 create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name)
             print('\n')
 
-    if result == 'yes':
-        root = tk.Tk()
-        root.withdraw()
-
-        output_selected = fd.askdirectory(title='Select the output folder')
+    if save_button_selection == 'Yes':
 
         pdfs = os.listdir(im_path)
         merger = PdfFileMerger()
@@ -652,3 +652,4 @@ def display_selected_plot(df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, folder_se
     else:
         print("No saving")
     
+
