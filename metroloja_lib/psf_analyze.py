@@ -523,26 +523,30 @@ def select_param(button_boxplot):
     button_param_selected = widgets.Button(description="Get Selected!")
     output1 = widgets.Output()
     
-
     button_param_selected.layout.visibility = 'hidden'
 
 
     def return_param(b):
-        #print('OK!')
-        #global selected_param
-        selected_param = []
-        for i in range(0, len(checkboxes)):
-            if checkboxes[i].value == True:
-                selected_param = selected_param + [checkboxes[i].description]
-        
-        button_boxplot.layout.visibility = 'visible'
-        return(selected_param)
+        with output1:
+            selected_param = []
+            for i in range(0, len(checkboxes)):
+                if checkboxes[i].value == True:
+                    selected_param = selected_param + [checkboxes[i].description]
+
+            button_boxplot.layout.visibility = 'visible'
+            print(selected_param)
+            global test
+            test = selected_param
+            print(f'TEST1 : {test}')
+            return(selected_param)
 
 
     def disable_param_button(b):
         button_param_selected.layout.visibility = 'visible'
 
-    
+    def send_param(b):
+        with param_output:
+            print(output1.outputs[0]['text'])
     checkboxes_output = widgets.VBox(children=checkboxes)
     for i in range(4):
         checkboxes_output.children[i].observe(disable_param_button)
@@ -550,9 +554,10 @@ def select_param(button_boxplot):
     display(checkboxes_output)
 
     button_param_selected.on_click(return_param)
-    button_param_selected.observe(return_param)
+    #button_param_selected.observe(return_param)
     display(button_param_selected, output1)
-    #return(test)
+    print(output1)
+    #return(output1.outputs[0]['text'])
     
     '''
     #Parameter to return
@@ -567,7 +572,7 @@ def select_param(button_boxplot):
     #return(selected_param)
     '''
         
- 
+print(f'TEST2 : {test}')
     
 values = {
     "FWHM" : "1",
@@ -577,12 +582,14 @@ values = {
 }
 
 
-def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
+def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
     save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
         disabled=False,
         button_style='info',
+        value=None,
+        #tooltips=['Description of slow', 'Description of regular', 'Description of fast'],
     )
     display(save_button_selection)
     print(save_button_selection.value)
