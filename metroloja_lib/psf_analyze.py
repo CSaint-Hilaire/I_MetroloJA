@@ -519,9 +519,6 @@ selected_param = []
 def select_param(button_boxplot):
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
-    
-
-
 
     button_param_selected = widgets.Button(description="Get Selected!")
     output1 = widgets.Output()
@@ -532,13 +529,14 @@ def select_param(button_boxplot):
 
     def return_param(b):
         #print('OK!')
+        #global selected_param
         selected_param = []
         for i in range(0, len(checkboxes)):
             if checkboxes[i].value == True:
                 selected_param = selected_param + [checkboxes[i].description]
-        print(selected_param)
         
         button_boxplot.layout.visibility = 'visible'
+        return(selected_param)
 
 
     def disable_param_button(b):
@@ -552,10 +550,24 @@ def select_param(button_boxplot):
     display(checkboxes_output)
 
     button_param_selected.on_click(return_param)
+    button_param_selected.observe(return_param)
     display(button_param_selected, output1)
+    #return(test)
+    
+    '''
+    #Parameter to return
+    selected_param = []
+    for i in range(0, len(checkboxes)):
+        if checkboxes[i].value == True:
+            selected_param = selected_param + [checkboxes[i].description]
+    print(selected_param)
+
+    button_boxplot.layout.visibility = 'visible'
     return(selected_param)
+    #return(selected_param)
+    '''
         
-        
+ 
     
 values = {
     "FWHM" : "1",
@@ -564,7 +576,8 @@ values = {
     "SBR" : "4"
 }
 
-def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
+
+def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
     save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
