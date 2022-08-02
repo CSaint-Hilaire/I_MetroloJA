@@ -11,7 +11,7 @@ from PyPDF2 import PdfFileMerger
 from functools import reduce
 from scipy import stats
 
-global selected_param
+
 selected_param = None
 
 def select_folder(folder_selected):
@@ -512,54 +512,54 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
         fig.write_image(SBRpdf_path)
 
 
-
 def select_param(button_boxplot):
-
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
-    
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
-    checkboxes_output = widgets.VBox(children=checkboxes)
-    
-    
-    
+    #global selected_param
+    selected_param = []
+    for i in range(0, len(checkboxes)):
+        if checkboxes[i].value == True:
+            selected_param = selected_param + [checkboxes[i].description]
+    print(selected_param)
+
+
+
     button_param_selected = widgets.Button(description="Get Selected!")
-    output = widgets.Output()
+    output1 = widgets.Output()
     
-    
+
     button_param_selected.layout.visibility = 'hidden'
-    
-    
+
+
+    def return_param(b):
+        #print('OK!')
+        button_boxplot.layout.visibility = 'visible'
+
+
     def disable_param_button(b):
         button_param_selected.layout.visibility = 'visible'
-       
-    
-    def return_param(b):
-        
-        selected_param = []
-        for i in range(0, len(checkboxes)):
-            if checkboxes[i].value == True:
-                selected_param = selected_param + [checkboxes[i].description]
-        
-        button_boxplot.disabled = False
-        print('OK!')
-        
 
     
+    checkboxes_output = widgets.VBox(children=checkboxes)
     for i in range(4):
         checkboxes_output.children[i].observe(disable_param_button)
-    button_param_selected.on_click(return_param)
+
     display(checkboxes_output)
-    display(button_param_selected, output)
+
+    button_param_selected.on_click(return_param)
+    display(button_param_selected, output1)
+    return(selected_param)
+        
+        
     
+values = {
+    "FWHM" : "1",
+    "Fit (R2)" : "2",
+    "Mes./theory resolution ratio" : "3",
+    "SBR" : "4"
+}
 
-
-    
-values = {"FWHM" : "1",
-              "Fit (R2)" : "2",
-              "Mes./theory resolution ratio" : "3",
-              "SBR" : "4"}
-
-def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, selected_param=selected_param, values=values):
+def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
     save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
@@ -567,10 +567,11 @@ def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedS
         button_style='info',
     )
     display(save_button_selection)
+    print(save_button_selection.value)
 
 
 
-    if save_button_selection == 'Yes':
+    if save_button_selection.value == 'Yes':
         im_path = os.path.join(folder_selected, "pdf_result")
         
         if not os.path.exists(im_path):
@@ -585,10 +586,12 @@ def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedS
     dfY_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'Y']
     dfZ_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'Z']
 
-
+    print(selected_param)
     for i in selected_param:
+        print(f'selected_param : {i}')
         if i in values:
             param = i
+            print(f'values : {param}')
             if int(values[i]) in range(1, 4):
                 if param == 'FWHM':
                     table_column_param = 'Resolution (µm) : FWHM'
@@ -613,7 +616,7 @@ def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedS
                 create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name)
             print('\n')
 
-    if save_button_selection == 'Yes':
+    if save_button_selection.value == 'Yes':
 
         pdfs = os.listdir(im_path)
         merger = PdfFileMerger()
@@ -623,23 +626,23 @@ def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedS
             merger.append(p)
 
         fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
-        final_pdf = os.path.join(output_selected, fnew)
+        final_pdf = os.path.join(folder_selected, fnew)
         counter = 0
         root, ext = os.path.splitext(fnew)
         while os.path.exists(f'{final_pdf}'):
             counter += 1
             fnew = '%s_(%i)%s' % (root, counter, ext)    
-            final_pdf = os.path.join(output_selected, fnew)
+            final_pdf = os.path.join(folder_selected, fnew)
 
         merger.write(final_pdf)
         merger.close()
 
-        if output_selected == '':
+        if folder_selected == '':
             os.remove(fnew)
             print(f'No PDF file created !')
         else:
             print(f'{fnew} is created')
-            print(f'PATH : {output_selected}')
+            print(f'PATH : {folder_selected}')
 
 
         
@@ -651,5 +654,3 @@ def display_selected_plot(folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedS
 
     else:
         print("No saving")
-    
-
