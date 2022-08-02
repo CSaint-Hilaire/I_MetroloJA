@@ -12,7 +12,6 @@ from functools import reduce
 from scipy import stats
 
 
-selected_param = None
 
 def select_folder(folder_selected):
     date_file = os.listdir(folder_selected)
@@ -511,16 +510,16 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
         SBRpdf_path = os.path.join(im_path, SBRpdf_name)
         fig.write_image(SBRpdf_path)
 
+        
 
+'''
+global selected_param
+selected_param = []
+'''
 def select_param(button_boxplot):
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
-    #global selected_param
-    selected_param = []
-    for i in range(0, len(checkboxes)):
-        if checkboxes[i].value == True:
-            selected_param = selected_param + [checkboxes[i].description]
-    print(selected_param)
+    
 
 
 
@@ -533,6 +532,12 @@ def select_param(button_boxplot):
 
     def return_param(b):
         #print('OK!')
+        selected_param = []
+        for i in range(0, len(checkboxes)):
+            if checkboxes[i].value == True:
+                selected_param = selected_param + [checkboxes[i].description]
+        print(selected_param)
+        
         button_boxplot.layout.visibility = 'visible'
 
 
