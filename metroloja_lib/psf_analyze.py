@@ -535,10 +535,6 @@ def select_param(button_boxplot):
 
             button_boxplot.layout.visibility = 'visible'
             print(selected_param)
-            global test
-            test = selected_param
-            print(f'TEST1 : {test}')
-            return(selected_param)
 
 
     def disable_param_button(b):
@@ -554,25 +550,11 @@ def select_param(button_boxplot):
     display(checkboxes_output)
 
     button_param_selected.on_click(return_param)
-    #button_param_selected.observe(return_param)
     display(button_param_selected, output1)
-    print(output1)
-    #return(output1.outputs[0]['text'])
+    return(output1)
     
-    '''
-    #Parameter to return
-    selected_param = []
-    for i in range(0, len(checkboxes)):
-        if checkboxes[i].value == True:
-            selected_param = selected_param + [checkboxes[i].description]
-    print(selected_param)
-
-    button_boxplot.layout.visibility = 'visible'
-    return(selected_param)
-    #return(selected_param)
-    '''
+    
         
-print(f'TEST2 : {test}')
     
 values = {
     "FWHM" : "1",
