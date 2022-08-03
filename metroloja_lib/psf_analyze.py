@@ -563,25 +563,16 @@ values = {
 
 
 def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
-    print(selected_param)
     selected_param = selected_param.replace("'", "")
     selected_param = selected_param.replace("]\n", "")
-    
-    
-    print(selected_param)
-    print(type(selected_param))
-
     selected_param = selected_param.strip('][').split(', ')
-
-    print(selected_param)
-    print(type(selected_param))
+    
     save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
         disabled=False,
         button_style='info',
         value=None,
-        #tooltips=['Description of slow', 'Description of regular', 'Description of fast'],
     )
     out = widgets.Output()
     
@@ -590,17 +581,23 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     out2 = widgets.Output()
     button_boxplot2.layout.visibility = 'hidden'
     
+    
+    pdf_path = None
+    
     def fun(obj):
         with out:
             if save_button_selection.value == 'Yes':
-                global im_path
-                im_path = os.path.join(folder_selected, "pdf_result")
+                global pdf_path
+                pdf_path = os.path.join(folder_selected, "pdf_result")
+                
 
-                if not os.path.exists(im_path):
-                    os.makedirs(im_path)
-            else:
-                im_path = None
+                if not os.path.exists(pdf_path):
+                    os.makedirs(pdf_path)
+            print(pdf_path)
             button_boxplot2.layout.visibility = 'visible'
+            return(pdf_path)
+                    
+            
             
             
     save_button_selection.observe(fun, 'value')
@@ -608,9 +605,13 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     
     
     
+    print(pdf_path)
     
     def boxp(obj):
         with out2:
+            im_path = pdf_path
+            print(im_path)
+            result = save_button_selection.value
             sys_name = df_XYZ["Microscope"].unique()
 
             dfX_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'X']
@@ -620,10 +621,8 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
             
                 
             for i in selected_param:
-                print(f'selected_param : {i}')
                 if i in values:
                     param = i
-                    print(f'values : {param}')
                     if int(values[i]) in range(1, 4):
                         if param == 'FWHM':
                             table_column_param = 'Resolution (µm) : FWHM'
@@ -641,6 +640,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
                             med_column_param = "Mes./theory resolution ratio median"
                             ttest_table_column = 'Mes./theory resolution ratio max'
 
+                        
                         create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
                                        result, ttest_table_column, df_MedStd_SBR, leg_dict, sys_name, 
                                        dfX_MedStd, dfY_MedStd, dfZ_MedStd)
@@ -651,9 +651,12 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
             if save_button_selection.value == 'Yes':
 
                 pdfs = os.listdir(im_path)
+                print(pdfs)
                 merger = PdfFileMerger()
 
                 for pdf in pdfs:
+                    print(im_path)
+                    print(pdf)
                     p = os.path.join(im_path, pdf)
                     merger.append(p)
 
