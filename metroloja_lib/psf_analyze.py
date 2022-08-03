@@ -605,11 +605,10 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     
     
     
-    print(pdf_path)
     
     def boxp(obj):
         with out2:
-            im_path = pdf_path
+            im_path = fun(None)
             print(im_path)
             result = save_button_selection.value
             sys_name = df_XYZ["Microscope"].unique()
