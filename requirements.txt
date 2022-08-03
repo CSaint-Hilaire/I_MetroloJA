@@ -11,3 +11,4 @@ ipywidgets>=7.4.2
 notebook>=5.7.0
 ipyupload
 ipyfilechooser
+kaleido
