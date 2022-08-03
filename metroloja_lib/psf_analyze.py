@@ -433,7 +433,7 @@ def create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
 
     fig.show()
     
-    if result == 'yes':
+    if result == 'Yes':
         global XYZpdf_name
         param = param.replace(" ", "_")
         param = param.replace(".", "")
@@ -504,7 +504,7 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
     
     fig.show()
     
-    if result == 'yes':
+    if result == 'Yes':
         global SBRpdf_name
         SBRpdf_name = f'SBR_boxplot.pdf'
         SBRpdf_path = os.path.join(im_path, SBRpdf_name)
@@ -586,6 +586,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     
     def fun(obj):
         with out:
+            button_boxplot2.layout.visibility = 'visible'
             if save_button_selection.value == 'Yes':
                 global pdf_path
                 pdf_path = os.path.join(folder_selected, "pdf_result")
@@ -593,9 +594,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
 
                 if not os.path.exists(pdf_path):
                     os.makedirs(pdf_path)
-            print(pdf_path)
-            button_boxplot2.layout.visibility = 'visible'
-            return(pdf_path)
+                return(pdf_path)
                     
             
             
@@ -609,7 +608,6 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     def boxp(obj):
         with out2:
             im_path = fun(None)
-            print(im_path)
             result = save_button_selection.value
             sys_name = df_XYZ["Microscope"].unique()
 
