@@ -512,11 +512,8 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
 
         
 
-'''
-global selected_param
-selected_param = []
-'''
-def select_param(button_boxplot):
+
+def select_param(button_boxplot, button_final_param):
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
 
@@ -534,6 +531,7 @@ def select_param(button_boxplot):
                     selected_param = selected_param + [checkboxes[i].description]
 
             button_boxplot.layout.visibility = 'visible'
+            button_final_param.layout.visibility = 'visible'
             print(selected_param)
 
 
