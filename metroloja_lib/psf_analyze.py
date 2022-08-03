@@ -563,6 +563,18 @@ values = {
 
 
 def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
+    print(selected_param)
+    selected_param = selected_param.replace("'", "")
+    selected_param = selected_param.replace("]\n", "")
+    
+    
+    print(selected_param)
+    print(type(selected_param))
+
+    selected_param = selected_param.strip('][').split(', ')
+
+    print(selected_param)
+    print(type(selected_param))
     save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
@@ -571,91 +583,108 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
         value=None,
         #tooltips=['Description of slow', 'Description of regular', 'Description of fast'],
     )
-    display(save_button_selection)
-    print(save_button_selection.value)
+    out = widgets.Output()
+    
+    
+    button_boxplot2 = widgets.Button(description="Show Boxplot!")
+    out2 = widgets.Output()
+    button_boxplot2.layout.visibility = 'hidden'
+    
+    def fun(obj):
+        with out:
+            if save_button_selection.value == 'Yes':
+                global im_path
+                im_path = os.path.join(folder_selected, "pdf_result")
+
+                if not os.path.exists(im_path):
+                    os.makedirs(im_path)
+            else:
+                im_path = None
+            button_boxplot2.layout.visibility = 'visible'
+            
+            
+    save_button_selection.observe(fun, 'value')
+    display(save_button_selection, out)
+    
+    
+    
+    
+    def boxp(obj):
+        with out2:
+            sys_name = df_XYZ["Microscope"].unique()
+
+            dfX_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'X']
+            dfY_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'Y']
+            dfZ_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'Z']
+
+            
+                
+            for i in selected_param:
+                print(f'selected_param : {i}')
+                if i in values:
+                    param = i
+                    print(f'values : {param}')
+                    if int(values[i]) in range(1, 4):
+                        if param == 'FWHM':
+                            table_column_param = 'Resolution (µm) : FWHM'
+                            med_column_param = "FWHM median"
+                            ttest_table_column = 'FWHM max'
+
+                        elif param == 'Fit (R2)':
+                            table_column_param = 'Fit (R2)'
+                            med_column_param = "R2 median"
+                            ttest_table_column = 'R2 max'
+
+
+                        elif param == 'Mes./theory resolution ratio':
+                            table_column_param = 'Mes./theory resolution ratio (µm)'
+                            med_column_param = "Mes./theory resolution ratio median"
+                            ttest_table_column = 'Mes./theory resolution ratio max'
+
+                        create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
+                                       result, ttest_table_column, df_MedStd_SBR, leg_dict, sys_name, 
+                                       dfX_MedStd, dfY_MedStd, dfZ_MedStd)
+                    if int(values[i]) == 4:
+                        create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name)
+                    print('\n')
+
+            if save_button_selection.value == 'Yes':
+
+                pdfs = os.listdir(im_path)
+                merger = PdfFileMerger()
+
+                for pdf in pdfs:
+                    p = os.path.join(im_path, pdf)
+                    merger.append(p)
+
+                fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
+                final_pdf = os.path.join(folder_selected, fnew)
+                counter = 0
+                root, ext = os.path.splitext(fnew)
+                while os.path.exists(f'{final_pdf}'):
+                    counter += 1
+                    fnew = '%s_(%i)%s' % (root, counter, ext)    
+                    final_pdf = os.path.join(folder_selected, fnew)
+
+                merger.write(final_pdf)
+                merger.close()
+
+                if folder_selected == '':
+                    os.remove(fnew)
+                    print(f'No PDF file created !')
+                else:
+                    print(f'{fnew} is created')
+                    print(f'PATH : {folder_selected}')
 
 
 
-    if save_button_selection.value == 'Yes':
-        im_path = os.path.join(folder_selected, "pdf_result")
-        
-        if not os.path.exists(im_path):
-            os.makedirs(im_path)
-    else:
-        im_path = None
-
-
-    sys_name = df_XYZ["Microscope"].unique()
-
-    dfX_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'X']
-    dfY_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'Y']
-    dfZ_MedStd = dfXYZ_MedStd.loc[dfXYZ_MedStd['Axe'] == 'Z']
-
-    print(selected_param)
-    for i in selected_param:
-        print(f'selected_param : {i}')
-        if i in values:
-            param = i
-            print(f'values : {param}')
-            if int(values[i]) in range(1, 4):
-                if param == 'FWHM':
-                    table_column_param = 'Resolution (µm) : FWHM'
-                    med_column_param = "FWHM median"
-                    ttest_table_column = 'FWHM max'
-
-                elif param == 'Fit (R2)':
-                    table_column_param = 'Fit (R2)'
-                    med_column_param = "R2 median"
-                    ttest_table_column = 'R2 max'
-
-
-                elif param == 'Mes./theory resolution ratio':
-                    table_column_param = 'Mes./theory resolution ratio (µm)'
-                    med_column_param = "Mes./theory resolution ratio median"
-                    ttest_table_column = 'Mes./theory resolution ratio max'
-
-                create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
-                               result, ttest_table_column, df_MedStd_SBR, leg_dict, sys_name, 
-                               dfX_MedStd, dfY_MedStd, dfZ_MedStd)
-            if int(values[i]) == 4:
-                create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name)
-            print('\n')
-
-    if save_button_selection.value == 'Yes':
-
-        pdfs = os.listdir(im_path)
-        merger = PdfFileMerger()
-
-        for pdf in pdfs:
-            p = os.path.join(im_path, pdf)
-            merger.append(p)
-
-        fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
-        final_pdf = os.path.join(folder_selected, fnew)
-        counter = 0
-        root, ext = os.path.splitext(fnew)
-        while os.path.exists(f'{final_pdf}'):
-            counter += 1
-            fnew = '%s_(%i)%s' % (root, counter, ext)    
-            final_pdf = os.path.join(folder_selected, fnew)
-
-        merger.write(final_pdf)
-        merger.close()
-
-        if folder_selected == '':
-            os.remove(fnew)
-            print(f'No PDF file created !')
-        else:
-            print(f'{fnew} is created')
-            print(f'PATH : {folder_selected}')
-
-
-        
-        im_path = pathlib.Path(im_path)
-        if im_path.exists() and im_path.is_dir():
-            shutil.rmtree(im_path)
+                im_path = pathlib.Path(im_path)
+                if im_path.exists() and im_path.is_dir():
+                    shutil.rmtree(im_path)
 
 
 
-    else:
-        print("No saving")
+            else:
+                print("No saving")
+    button_boxplot2.on_click(boxp)
+    display(button_boxplot2, out2)
