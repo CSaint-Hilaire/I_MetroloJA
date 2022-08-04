@@ -4,6 +4,7 @@ import plotly.express as px
 import ipywidgets as widgets
 from ipyfilechooser import FileChooser
 import pandas as pd
+from pathlib import Path
 
 from alive_progress import alive_bar
 from tkinter import filedialog as fd
@@ -526,8 +527,8 @@ def select_param(button_boxplot, button_final_param):
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
 
-    button_param_selected = widgets.Button(description="Get Selected!", button_style='GreenYellow', 
-                                           style=dict(font_weight='bold'))
+    button_param_selected = widgets.Button(description="Get Selected!",  
+                                           style=dict(font_weight='bold', button_color = 'GreenYellow'))
     box_layout2 = widgets.Layout(display='flex', flex_flow='row', justify_content='center', align_items='baseline')
     get_lab = widgets.Label('1st : ')
     output1 = widgets.Output()
@@ -674,14 +675,18 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
                     p = os.path.join(im_path, pdf)
                     merger.append(p)
 
+                home = str(Path.home())
+                result_path = f'{home}/RESULT'
+                if not os.path.exists(result_path):
+                    os.makedirs(result_path)
                 fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
-                final_pdf = os.path.join(folder_selected, fnew)
+                final_pdf = os.path.join(result_path, fnew)
                 counter = 0
                 root, ext = os.path.splitext(fnew)
                 while os.path.exists(f'{final_pdf}'):
                     counter += 1
                     fnew = '%s_(%i)%s' % (root, counter, ext)    
-                    final_pdf = os.path.join(folder_selected, fnew)
+                    final_pdf = os.path.join(result_path, fnew)
 
                 merger.write(final_pdf)
                 merger.close()
@@ -691,7 +696,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
                     print(f'No PDF file created !')
                 else:
                     print(f'{fnew} is created')
-                    print(f'PATH : {folder_selected}')
+                    print(f'PATH : {result_path}')
 
 
 
