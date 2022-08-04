@@ -514,6 +514,14 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
 
 
 def select_param(button_boxplot, button_final_param):
+    text2 = '\n2. Check all the measurements you want to plot'
+    Lab2 = widgets.HTML(value = f"<b><font color='green'>{text2}</b>")
+    box_layout = widgets.Layout(display='flex', flex_flow='column',
+                                align_items='center')
+    
+    Lab_box2 =widgets.HBox([Lab2],layout=box_layout)
+    display(Lab_box2)
+    
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
 
@@ -545,10 +553,12 @@ def select_param(button_boxplot, button_final_param):
     for i in range(4):
         checkboxes_output.children[i].observe(disable_param_button)
 
-    display(checkboxes_output)
+    check_box = widgets.HBox([checkboxes_output],layout=box_layout)
+    display(check_box)
 
+    get_box = widgets.HBox([button_param_selected, output1],layout=box_layout)
     button_param_selected.on_click(return_param)
-    display(button_param_selected, output1)
+    display(get_box)
     return(output1)
     
     
@@ -567,11 +577,13 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     selected_param = selected_param.replace("]\n", "")
     selected_param = selected_param.strip('][').split(', ')
     
+    style = {'description_width': 'initial'}
     save_button_selection = widgets.ToggleButtons(
         options=['Yes', 'No'],
         description='Do you want to save your figures in PDF format ? ',
         disabled=False,
-        button_style='info',
+        button_style='info', 
+        style=style,
         value=None,
     )
     out = widgets.Output()
