@@ -13,7 +13,6 @@ from functools import reduce
 from scipy import stats
 
 
-
 def select_folder(folder_selected):
     date_file = os.listdir(folder_selected)
     for i in date_file:
@@ -520,7 +519,7 @@ def select_param(button_boxplot, button_final_param, box_layout=box_layout):
     Lab2 = widgets.HTML(value = f"<b><font color='green', size='5'>{text2}</b>")
     
     
-    Lab_box2 =widgets.HBox([Lab2],layout=box_layout)
+    Lab_box2 = widgets.HBox([Lab2],layout=box_layout)
     display(Lab_box2)
     
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
