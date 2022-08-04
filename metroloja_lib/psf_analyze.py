@@ -514,8 +514,8 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
 
 
 def select_param(button_boxplot, button_final_param):
-    text2 = '\n2. Check all the measurements you want to plot'
-    Lab2 = widgets.HTML(value = f"<b><font color='green'>{text2}</b>")
+    text2 = '\n\n2. Check all the measurements you want to plot'
+    Lab2 = widgets.HTML(value = f"<b><font color='green', size='5'>{text2}</b>")
     box_layout = widgets.Layout(display='flex', flex_flow='column',
                                 align_items='center')
     
@@ -589,7 +589,8 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     out = widgets.Output()
     
     
-    button_boxplot2 = widgets.Button(description="Show Boxplot!")
+    button_boxplot2 = widgets.Button(description="Show Boxplot!", style=dict(font_weight='bold', button_color = '#fe7c5c'))
+    
     out2 = widgets.Output()
     button_boxplot2.layout.visibility = 'hidden'
     
