@@ -514,7 +514,8 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
 
 
 def select_param(button_boxplot, button_final_param):
-    text2 = '\n\n2. Check all the measurements you want to plot'
+    print('\n')
+    text2 = '2. Check all the measurements you want to plot'
     Lab2 = widgets.HTML(value = f"<b><font color='green', size='5'>{text2}</b>")
     box_layout = widgets.Layout(display='flex', flex_flow='column',
                                 align_items='center')
@@ -525,7 +526,10 @@ def select_param(button_boxplot, button_final_param):
     data = ["FWHM", "Fit (R2)", "Mes./theory resolution ratio", "SBR"]
     checkboxes = [widgets.Checkbox(value=False, description=label) for label in data]
 
-    button_param_selected = widgets.Button(description="Get Selected!")
+    button_param_selected = widgets.Button(description="Get Selected!", button_style='GreenYellow', 
+                                           style=dict(font_weight='bold'))
+    box_layout2 = widgets.Layout(display='flex', flex_flow='row', justify_content='center', align_items='baseline')
+    get_lab = widgets.Label('1st : ')
     output1 = widgets.Output()
     
     button_param_selected.layout.visibility = 'hidden'
@@ -556,7 +560,8 @@ def select_param(button_boxplot, button_final_param):
     check_box = widgets.HBox([checkboxes_output],layout=box_layout)
     display(check_box)
 
-    get_box = widgets.HBox([button_param_selected, output1],layout=box_layout)
+    get_box = widgets.HBox([get_lab, button_param_selected, output1],layout=box_layout2)
+
     button_param_selected.on_click(return_param)
     display(get_box)
     return(output1)
@@ -589,7 +594,8 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     out = widgets.Output()
     
     
-    button_boxplot2 = widgets.Button(description="Show Boxplot!", style=dict(font_weight='bold', button_color = '#fe7c5c'))
+    #button_boxplot2 = widgets.Button(description="Show Boxplot!", style=dict(font_weight='bold', button_color = '#fe7c5c'))
+    button_boxplot2 = widgets.Button(description="Show Boxplot!", button_style='success', style=dict(font_weight='bold'))
     
     out2 = widgets.Output()
     button_boxplot2.layout.visibility = 'hidden'
