@@ -512,14 +512,13 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
         fig.write_image(SBRpdf_path)
 
         
+box_layout = widgets.Layout(display='flex', flex_flow='column', align_items='center')
 
-
-def select_param(button_boxplot, button_final_param):
+def select_param(button_boxplot, button_final_param, box_layout=box_layout):
     print('\n')
     text2 = '2. Check all the measurements you want to plot'
     Lab2 = widgets.HTML(value = f"<b><font color='green', size='5'>{text2}</b>")
-    box_layout = widgets.Layout(display='flex', flex_flow='column',
-                                align_items='center')
+    
     
     Lab_box2 =widgets.HBox([Lab2],layout=box_layout)
     display(Lab_box2)
@@ -578,7 +577,9 @@ values = {
 }
 
 
-def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
+def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, 
+                          values=values, box_layout=box_layout):
+    print('\n')
     print('\n')
     selected_param = selected_param.replace("'", "")
     selected_param = selected_param.replace("]\n", "")
@@ -596,9 +597,10 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     out = widgets.Output()
     
     
-    button_boxplot2 = widgets.Button(description="Show Boxplot!", button_style='success', style=dict(font_weight='bold'))
+    button_boxplot2 = widgets.Button(description="Show Boxplot!", button_style='warning', style=dict(font_weight='bold'), 
+                                     layout = widgets.Layout(width = '40%', height = '60px'))
 
-    
+    box2 = widgets.HBox(children=[button_boxplot2],layout=box_layout)
     out2 = widgets.Output()
     button_boxplot2.layout.visibility = 'hidden'
     
@@ -621,7 +623,8 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
             
             
     save_button_selection.observe(fun, 'value')
-    display(save_button_selection, out)    
+    display(save_button_selection, out) 
+    print('\n')
     
     
     
@@ -709,5 +712,5 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
                 print("No saving")
 
     button_boxplot2.on_click(boxp)
-    display(button_boxplot2, out2)
+    display(box2, out2)
         
