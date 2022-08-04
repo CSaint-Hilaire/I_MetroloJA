@@ -579,6 +579,7 @@ values = {
 
 
 def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ_MedStd, df_MedStd_SBR, leg_dict, values=values):
+    print('\n')
     selected_param = selected_param.replace("'", "")
     selected_param = selected_param.replace("]\n", "")
     selected_param = selected_param.strip('][').split(', ')
@@ -595,7 +596,6 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     out = widgets.Output()
     
     
-    #button_boxplot2 = widgets.Button(description="Show Boxplot!", style=dict(font_weight='bold', button_color = '#fe7c5c'))
     button_boxplot2 = widgets.Button(description="Show Boxplot!", button_style='success', style=dict(font_weight='bold'))
     
     out2 = widgets.Output()
@@ -606,6 +606,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     
     def fun(obj):
         with out:
+            print('FIRST')
             button_boxplot2.layout.visibility = 'visible'
             if save_button_selection.value == 'Yes':
                 global pdf_path
@@ -627,6 +628,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
     
     def boxp(obj):
         with out2:
+            print('SECOND')
             im_path = fun(None)
             result = save_button_selection.value
             sys_name = df_XYZ["Microscope"].unique()
@@ -663,7 +665,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
                                        dfX_MedStd, dfY_MedStd, dfZ_MedStd)
                     if int(values[i]) == 4:
                         create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name)
-                    print('\n')
+                    #print('\n')
 
             if save_button_selection.value == 'Yes':
 
@@ -708,5 +710,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
 
             else:
                 print("No saving")
-    button_boxplot2.on_click(boxp)
-    display(button_boxplot2, out2)
+
+        button_boxplot2.on_click(boxp)
+        display(button_boxplot2, out2)
+        
