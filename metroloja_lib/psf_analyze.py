@@ -648,12 +648,10 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
             if save_button_selection.value == 'Yes':
 
                 pdfs = os.listdir(im_path)
-                print(pdfs)
                 merger = PdfFileMerger()
 
                 for pdf in pdfs:
-                    print(im_path)
-                    print(pdf)
+
                     p = os.path.join(im_path, pdf)
                     merger.append(p)
 
