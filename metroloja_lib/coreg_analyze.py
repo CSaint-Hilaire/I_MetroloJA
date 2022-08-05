@@ -271,7 +271,7 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
     
 
     fig = px.box(df, x = "Date", y = table_column_param, color = "Date", category_orders={"Date" : date1},
-                 facet_row="Combination", title = f"{sys_name[0]}           {param} Box plot           PICT-BDD           (Update : {datetime.datetime.today().strftime('%Y-%m-%d')})<br><sub><b>Statistical T-Tests are carried out between a date and the date immediately preceding it</b></sub>", points="outliers", height=2000, width=900).update_yaxes(matches=None)
+                 facet_row="Combination", title = f"{sys_name[0]}           {param} Box plot           PICT-BDD           (Update : {datetime.datetime.today().strftime('%Y-%m-%d')})<br><sub><b>Statistical T-Tests are carried out between a date and the date immediately preceding it</b></sub>", points="outliers", height=3000, width=900).update_yaxes(matches=None)
 
     fig.update_layout(showlegend=True)
     fig.update_layout(title_x=0.5)
@@ -320,19 +320,18 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
             Y = TempDF_Med[TempDF_Med["Date"]==X]
             Y = Y[ttest_table_column]
             t, p = stats.ttest_ind(TempDF_1[table_column_param], TempDF_2[table_column_param], equal_var=False)
+            sz = 20
 
             if p >= 0.05:
                 symbol = '<sup><sup><b>ns</b></sup></sup>'
                 sz = 30
             elif p >= 0.01: 
                 symbol = '<sup><b>*</b></sup>'
-                sz = 20
             elif p >= 0.001:
                 symbol = '<sup><b>**</b></sup>'
-                sz = 20
             else:
                 symbol = '<sup><b>***</b></sup>'
-                sz = 20
+                
 
             fig.add_annotation(dict(font=dict(size=sz), 
                                     x=X, y=float(Y),
