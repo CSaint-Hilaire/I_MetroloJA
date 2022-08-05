@@ -320,12 +320,11 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
             Y = TempDF_Med[TempDF_Med["Date"]==X]
             Y = Y[ttest_table_column]
             t, p = stats.ttest_ind(TempDF_1[table_column_param], TempDF_2[table_column_param], equal_var=False)
-            sz = 20
+            sz = 14
 
             
             if p >= 0.05:
                 symbol = '<b>ns</b>'
-                sz = 30
             elif p >= 0.01: 
                 symbol = '<b>*</b>'
             elif p >= 0.001:
