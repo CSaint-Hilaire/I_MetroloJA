@@ -1,21 +1,17 @@
-import os, glob, time, datetime, pathlib, shutil
+import os, glob, pathlib, time, datetime, shutil
 import plotly.graph_objects as go
 import plotly.express as px
-import tkinter as tk
+import ipywidgets as widgets
+from ipyfilechooser import FileChooser
 import pandas as pd
+from pathlib import Path
 
 from alive_progress import alive_bar
-from tkinter import filedialog as fd
 from PyPDF2 import PdfFileMerger
 from functools import reduce
 from scipy import stats
 
-def select_folder():
-    root = tk.Tk()
-    root.withdraw()
-
-
-    folder_selected = fd.askdirectory() 
+def select_folder(folder_selected):
     date_file = os.listdir(folder_selected)
     for i in date_file:
         if i.startswith('.'):
@@ -44,9 +40,10 @@ def select_folder():
 
         del img_name[0]
         all_image_name.append(img_name)
-        
-        
-    print('Images name :')
+
+
+
+    #print('Images name :')
     for indx in range(len(all_image_name)):
         allimages = all_image_name[indx]
         for i in range(len(allimages)-1):
@@ -63,10 +60,10 @@ def select_folder():
 
     lf_name = []
     for indx in range(len(all_image_name)):
-        print(f'Date {indx + 1}')
+        #print(f'Date {indx + 1}')
         allimages = all_image_name[indx]
         for j in allimages:
-            print(f'   {j}')
+            #print(f'   {j}')
             lf_name.append(j)
     
     return(folder_selected, date_file, all_image_name, lf_name, len_tot_image)
@@ -74,10 +71,9 @@ def select_folder():
 
 
 
-
 def processed_path(folder_selected, date_file):
     len_bar = (len(date_file)-1)*2
-    print('Path of processed folder : \n')
+    #print('Path of processed folder : \n')
     all_processed_path = []
     for j in date_file:
         dt_path = os.path.join(folder_selected, j)
@@ -87,7 +83,7 @@ def processed_path(folder_selected, date_file):
             try:
                 if i.startswith('.') == False:
                     processed_path2 = os.path.join(processed_path,i)
-                    print(processed_path2)
+                    #print(processed_path2)
                     all_processed_path.append(processed_path2)
                     
             except:
@@ -205,47 +201,61 @@ def coreg_stats(DF_coreg0, DF_coreg1):
 
 
 
+box_layout = widgets.Layout(display='flex', flex_flow='column', align_items='center')
 
 
-
-def select_param():
-    master = tk.Tk()
-    master.geometry("300x100")
-    master.title('Check all the measurements you want to plot')
+def select_param(button_boxplot, button_final_param, box_layout=box_layout):
+    print('\n')
+    text2 = '2. Check all the measurements you want to plot'
+    Lab2 = widgets.HTML(value = f"<b><font color='green', size='5'>{text2}</b>")
+    Lab_box2 = widgets.HBox([Lab2],layout=box_layout)
+    display(Lab_box2)
+    
 
     values = ["Distances (µm)", "Ratios"]
+    checkboxes = [widgets.Checkbox(value=False, description=label) for label in values]
 
-    states_list = []
-    for text in values:
-        check = tk.StringVar(master)
-        check_but = tk.Checkbutton(master, text = text, variable = check,
-                                   onvalue = text, offvalue = 'off', command=check.get())
-        check_but.pack(padx=0.5, pady=0.5, anchor=tk.W)
-        states_list.append(check)
-
-    button = tk.Button(
-        master,
-        text="Get Selected",
-        command=master.quit)
-    button.pack(fill=tk.X, padx=5, pady=5)
+    button_param_selected = widgets.Button(description="Get Selected!",  
+                                           style=dict(font_weight='bold', button_color = 'GreenYellow'))
+    box_layout2 = widgets.Layout(display='flex', flex_flow='row', justify_content='center', align_items='baseline')
+    get_lab = widgets.Label('1st : ')
+    output1 = widgets.Output()
+    
+    button_param_selected.layout.visibility = 'hidden'
     
     
 
-    btn = tk.Button(master,text="Close", command=master.quit)
-    btn.pack(pady = 5)
+    def return_param(b):
+        with output1:
+            selected_param = []
+            for i in range(0, len(checkboxes)):
+                if checkboxes[i].value == True:
+                    selected_param = selected_param + [checkboxes[i].description]
+
+            button_boxplot.layout.visibility = 'visible'
+            button_final_param.layout.visibility = 'visible'
+            print(selected_param)
 
 
-    master.mainloop()
-    master.destroy()
+    def disable_param_button(b):
+        button_param_selected.layout.visibility = 'visible'
 
-    print("Selection :")
-    selected_param = []
-    for v in states_list:
-        if v.get()!='':
-            selected_param.append(v.get())
-            print(f"  * {v.get()}")
+    def send_param(b):
+        with param_output:
+            print(output1.outputs[0]['text'])
+    
+    checkboxes_output = widgets.VBox(children=checkboxes)
+    for i in range(2):
+        checkboxes_output.children[i].observe(disable_param_button)
 
-    return(selected_param, values)
+    check_box = widgets.HBox([checkboxes_output],layout=box_layout)
+    display(check_box)
+
+    get_box = widgets.HBox([get_lab, button_param_selected, output1],layout=box_layout2)
+
+    button_param_selected.on_click(return_param)
+    display(get_box)
+    return(output1)
 
 
 
@@ -275,13 +285,7 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
                       )
 
 
-    '''
-    main = tk.Tk()
-    main.withdraw()
-    main.geometry("100x100")
 
-    range_result = tk.messagebox.askquestion(f"{table_column_param} plot", "Do you want to put your figures on the same scale?")
-    '''
         
     listAllComb = list(DC_var.keys())
     nb_listAllComb = len(listAllComb)
@@ -293,24 +297,6 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
             go.Scatter(x=TempDF_Med["Date"].tolist(), y=TempDF_Med[med_column_param].tolist(), showlegend=False, mode='lines+markers',
                        line=dict(color="#000000")), row=nb_listAllComb, col=1
         )
-
-        '''
-        max_df = df.groupby(['Date', 'Microscope', 'Combination'])[table_column_param].max().to_frame('max').reset_index()
-        min_df = df.groupby(['Date', 'Microscope', 'Combination'])[table_column_param].min().to_frame('min').reset_index()
-
-        merge_MinMax = pd.merge(min_df, max_df, how='left', on=['Date', 'Microscope', 'Combination'])
-
-        
-        
-        
-        # Select range for boxplot
-        if range_result =='yes':
-            delta = 0.02
-            range_min = merge_MinMax["min"].min() - 0.04
-            range_max = merge_MinMax["max"].max() + 0.04
-            
-            fig.update_yaxes(range=[range_min, range_max], row=nb_listAllComb)
-        '''
 
 
             
@@ -361,7 +347,7 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
     
     fig.show()
     
-    if result == 'yes':
+    if result == 'Yes':
         global XYZpdf_name
         param = param.replace(" ", "_")
         param = param.replace(".", "")
@@ -377,94 +363,136 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
 
 
 
-def display_selected_plot(values, selected_param, df, df_MedStd, folder_selected, leg_dict, list_comb, date_list):
-    main = tk.Tk()
-    main.withdraw()
-    main.geometry("100x100")
-
-
-
-    result = tk.messagebox.askquestion("Save", "Do you want to save your figures in PDF format ?")
-
-
-    if result == 'yes':
-        im_path = os.path.join(folder_selected, "pdf_result")
-
-        if not os.path.exists(im_path):
-            os.makedirs(im_path)
-    else:
-        im_path = None
-
-    sys_name = df["Microscope"].unique()
-
-    index = 0
-    DC_var = {}
-    for a in range(len(list_comb)):
-        index += 1
-        DC_var["Comb" + str(index)] = df_MedStd.loc[df_MedStd['Combination'] == list_comb[a]].reset_index(drop=True)
+def display_selected_plot(selected_param, df, df_MedStd, folder_selected, leg_dict, list_comb, date_list, box_layout=box_layout):
+    values = ["Distances (µm)", "Ratios"]
     
-    for i in selected_param:
-        if i in values:
-            param = i
-            if param == 'Distances (µm)':
-                table_column_param = param
-                med_column_param = "Distances Median"
-                ttest_table_column = 'Distances Max'
+    print('\n')
+    print('\n')
+    selected_param = selected_param.replace("'", "")
+    selected_param = selected_param.replace("]\n", "")
+    selected_param = selected_param.strip('][').split(', ')
+    
+    style = {'description_width': 'initial'}
+    save_button_selection = widgets.ToggleButtons(
+        options=['Yes', 'No'],
+        description='Do you want to save your figures in PDF format ? ',
+        disabled=False,
+        button_style='info', 
+        style=style,
+        value=None,
+    )
+    out = widgets.Output()
+    
+    
+    button_boxplot2 = widgets.Button(description="Show Boxplot!", button_style='warning', style=dict(font_weight='bold'), 
+                                     layout = widgets.Layout(width = '40%', height = '60px'))
 
+    box2 = widgets.HBox(children=[button_boxplot2],layout=box_layout)
+    out2 = widgets.Output()
+    button_boxplot2.layout.visibility = 'hidden'
+    
+    
+    pdf_path = None
+    
+    def fun(obj):
+        with out:
+            button_boxplot2.layout.visibility = 'visible'
+            if save_button_selection.value == 'Yes':
+                global pdf_path
+                pdf_path = os.path.join(folder_selected, "pdf_result")
                 
-            else:
-                table_column_param = param
-                med_column_param = "Ratios Median"
-                ttest_table_column = 'Ratios Max'
 
-
-
-            create_box(df, param, table_column_param, med_column_param, im_path,
-                           result, ttest_table_column, leg_dict, sys_name, 
-                           DC_var, df_MedStd, date_list)
+                if not os.path.exists(pdf_path):
+                    os.makedirs(pdf_path)
+                return(pdf_path)
+                    
             
-            print('\n')
+            
+            
+    save_button_selection.observe(fun, 'value')
+    display(save_button_selection, out) 
+    print('\n')
+    
+    
+    
+    def boxp(obj):
+        with out2:
+            im_path = fun(None)
+            result = save_button_selection.value
 
-    if result == 'yes':
-        root = tk.Tk()
-        root.withdraw()
+            sys_name = df["Microscope"].unique()
 
-        output_selected = fd.askdirectory(title='Select the output folder')
+            index = 0
+            DC_var = {}
+            for a in range(len(list_comb)):
+                index += 1
+                DC_var["Comb" + str(index)] = df_MedStd.loc[df_MedStd['Combination'] == list_comb[a]].reset_index(drop=True)
 
-        pdfs = os.listdir(im_path)
-        merger = PdfFileMerger()
-
-        for pdf in pdfs:
-            p = os.path.join(im_path, pdf)
-            merger.append(p)
-
-        fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
-        final_pdf = os.path.join(output_selected, fnew)
-        counter = 0
-        root, ext = os.path.splitext(fnew)
-        while os.path.exists(f'{final_pdf}'):
-            counter += 1
-            fnew = '%s_(%i)%s' % (root, counter, ext)    
-            final_pdf = os.path.join(output_selected, fnew)
-
-        merger.write(final_pdf)
-        merger.close()
-
-        if output_selected == '':
-            os.remove(fnew)
-            print(f'No PDF file created !')
-        else:
-            print(f'{fnew} is created')
-            print(f'PATH : {output_selected}')
+            for i in selected_param:
+                if i in values:
+                    param = i
+                    if param == 'Distances (µm)':
+                        table_column_param = param
+                        med_column_param = "Distances Median"
+                        ttest_table_column = 'Distances Max'
 
 
-        
-        im_path = pathlib.Path(im_path)
-        if im_path.exists() and im_path.is_dir():
-            shutil.rmtree(im_path)
+                    else:
+                        table_column_param = param
+                        med_column_param = "Ratios Median"
+                        ttest_table_column = 'Ratios Max'
 
 
 
-    else:
-        print("No saving")
+                    create_box(df, param, table_column_param, med_column_param, im_path,
+                                   result, ttest_table_column, leg_dict, sys_name, 
+                                   DC_var, df_MedStd, date_list)
+
+                    print('\n')
+
+            if result == 'Yes':
+                pdfs = os.listdir(im_path)
+                merger = PdfFileMerger()
+
+                for pdf in pdfs:
+                    p = os.path.join(im_path, pdf)
+                    merger.append(p)
+
+                home = str(Path.home())
+                result_path = f'{home}/RESULT'
+                if not os.path.exists(result_path):
+                    os.makedirs(result_path)
+                
+                fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
+                final_pdf = os.path.join(result_path, fnew)
+                counter = 0
+                root, ext = os.path.splitext(fnew)
+                while os.path.exists(f'{final_pdf}'):
+                    counter += 1
+                    fnew = '%s_(%i)%s' % (root, counter, ext)    
+                    final_pdf = os.path.join(result_path, fnew)
+
+                merger.write(final_pdf)
+                merger.close()
+
+                if result_path == '':
+                    os.remove(fnew)
+                    print(f'No PDF file created !')
+                else:
+                    print(f'{fnew} is created')
+                    print(f'PATH : {result_path}')
+
+
+
+                im_path = pathlib.Path(im_path)
+                if im_path.exists() and im_path.is_dir():
+                    shutil.rmtree(im_path)
+
+
+
+            else:
+                print("No saving")
+                
+    button_boxplot2.on_click(boxp)
+    display(box2, out2)
     
