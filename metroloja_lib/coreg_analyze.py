@@ -165,7 +165,7 @@ def convert_to_df(all_processed_path, date_file, all_image_name, lf_name, len_to
                             #DF_coreg_noComb  = DF_coreg_noComb.groupby(['Date', 'Image Name']).size().reset_index(name='n')
                             DF_coreg_noComb2 = DF_coreg_noComb.groupby(['Date']).size().reset_index(name='n')
                             time.sleep(.005)
-                                        bar()
+                            bar()
                         
             idx += 1
                                 
