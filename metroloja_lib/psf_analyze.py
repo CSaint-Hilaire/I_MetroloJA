@@ -341,23 +341,21 @@ def create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
         Yx = Yx[ttest_table_column]
         tX, pX = stats.ttest_ind(TempDF_X1[table_column_param], TempDF_X2[table_column_param], equal_var=False)
         
+        sz = 14
         if pX >= 0.05:
-            symbolX = '<sup><sup><b>ns</b></sup></sup>'
-            sz = 30
+            symbolX = '<b>ns</b>'
         elif pX >= 0.01: 
-            symbolX = '<sup><b>*</b></sup>'
-            sz = 20
+            symbolX = '<b>*</b>'
         elif pX >= 0.001:
-            symbolX = '<sup><b>**</b></sup>'
-            sz = 20
+            symbolX = '<b>**</b>'
         else:
-            symbolX = '<sup><b>***</b></sup>'
-            sz = 20
+            symbolX = '<b>***</b>'
         fig.add_annotation(dict(font=dict(size=sz), 
                                 x=X, y=float(Yx),
                                 text=symbolX,
                                 showarrow=False,
                                 arrowhead=1,
+                                yanchor='bottom',
                                 xref='x1',
                                 yref='y3'))
 
@@ -374,23 +372,20 @@ def create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
         tY, pY = stats.ttest_ind(TempDF_Y1[table_column_param], TempDF_Y2[table_column_param], equal_var=False)
         
         if pY >= 0.05:
-            symbolY = '<sup><sup><b>ns</b></sup></sup>'
-            sz = 30
+            symbolY = '<b>ns</b>'
         elif pY >= 0.01: 
-            symbolY = '<sup><b>*</b></sup>'
-            sz = 20
+            symbolY = '<b>*</b>'
         elif pY >= 0.001:
-            symbolY = '<sup><b>**</b></sup>'
-            sz = 20
+            symbolY = '<b>**</b>'
         else:
-            symbolY = '<sup><b>***</b></sup>'
-            sz = 20
+            symbolY = '<b>***</b>'
         
         fig.add_annotation(dict(font=dict(size=sz), 
                                 x=X, y=float(Yy),
                                 text=symbolY,
                                 showarrow=False,
                                 arrowhead=1,
+                                yanchor='bottom',
                                 xref='x1',
                                 yref='y2'))
 
@@ -407,17 +402,13 @@ def create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
         tZ, pZ = stats.ttest_ind(TempDF_Z1[table_column_param], TempDF_Z2[table_column_param], equal_var=False)
         
         if pZ >= 0.05:
-            symbolZ = '<sup><sup><b>ns</b></sup></sup>'
-            sz = 30
+            symbolZ = '<b>ns</b>'
         elif pZ >= 0.01: 
-            symbolZ = '<sup><b>*</b></sup>'
-            sz = 20
+            symbolZ = '<b>*</b>'
         elif pZ >= 0.001:
-            symbolZ = '<sup><b>**</b></sup>'
-            sz = 20
+            symbolZ = '<b>**</b>'
         else:
-            symbolZ = '<sup><b>***</b></sup>'
-            sz = 20
+            symbolZ = '<b>***</b>'
         
         
         fig.add_annotation(dict(font=dict(size=sz), 
@@ -425,6 +416,7 @@ def create_XYZ_box(df_XYZ, param, table_column_param, med_column_param, im_path,
                                 text=symbolZ,
                                 showarrow=False,
                                 arrowhead=1,
+                                yanchor='bottom',
                                 xref='x1',
                                 yref='y1'))
     
@@ -481,24 +473,23 @@ def create_SBR_box(df_SBR, result, im_path, df_MedStd_SBR, leg_dict, sys_name):
         Y = df_MedStd_SBR[df_MedStd_SBR["Date"]==X]
         Y = Y["Max"]
         t, p = stats.ttest_ind(TempDF_SBR1["Sig/Backgnd ratio"], TempDF_SBR2["Sig/Backgnd ratio"], equal_var=False)
-        
+        sz = 14
+
         if p >= 0.05:
-            symbol = '<sup><sup><b>ns</b></sup></sup>'
-            sz = 30
+            symbol = '<b>ns</b>'
         elif p >= 0.01: 
-            symbol = '<sup><b>*</b></sup>'
-            sz = 20
+            symbol = '<b>*</b>'
         elif p >= 0.001:
-            symbol = '<sup><b>**</b></sup>'
-            sz = 20
+            symbol = '<b>**</b>'
         else:
-            symbol = '<sup><b>***</b></sup>'
-            sz = 20
+            symbol = '<b>***</b>'
+            
         fig.add_annotation(dict(font=dict(size=sz), 
                                 x=X, y=float(Y),
                                 text=symbol,
                                 showarrow=False,
-                                arrowhead=1))
+                                arrowhead=1, 
+                                yanchor='bottom'))
 
     
     fig.show()
@@ -677,7 +668,7 @@ def display_selected_plot(selected_param, folder_selected, df_XYZ, df_SBR, dfXYZ
                 result_path = f'{home}/RESULT'
                 if not os.path.exists(result_path):
                     os.makedirs(result_path)
-                fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
+                fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT_PSF.pdf"
                 final_pdf = os.path.join(result_path, fnew)
                 counter = 0
                 root, ext = os.path.splitext(fnew)
