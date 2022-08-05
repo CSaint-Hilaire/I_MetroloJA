@@ -465,7 +465,7 @@ def display_selected_plot(selected_param, df, df_MedStd, folder_selected, leg_di
                 if not os.path.exists(result_path):
                     os.makedirs(result_path)
                 
-                fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT.pdf"
+                fnew = f"{datetime.datetime.today().strftime('%Y%m%d')}_PLOT_RESULT_Coreg.pdf"
                 final_pdf = os.path.join(result_path, fnew)
                 counter = 0
                 root, ext = os.path.splitext(fnew)
