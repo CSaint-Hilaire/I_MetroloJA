@@ -96,75 +96,78 @@ def processed_path(folder_selected, date_file):
 
 
 def convert_to_df(all_processed_path, date_file, all_image_name, lf_name, len_tot_image, folder_selected):
-    DF_coreg = pd.DataFrame()
-    DF_coreg_noComb = pd.DataFrame()
-    idx = 0
-    for process in all_processed_path:
-        # r=root, d=directories, f = files
-        for r, d, f in os.walk(process):
-            for file in f:
-                if file == "summary.xls":
-                    f_path = os.path.join(r, file)
-                    TempName = all_image_name[idx]
-                    for i in range(len(TempName)):
-                        grp = TempName[i]
-                        path_split = process.split(os.sep)
+    with alive_bar(len_tot_image, force_tty = True) as bar:
+        DF_coreg = pd.DataFrame()
+        DF_coreg_noComb = pd.DataFrame()
+        idx = 0
+        for process in all_processed_path:
+            # r=root, d=directories, f = files
+            for r, d, f in os.walk(process):
+                for file in f:
+                    if file == "summary.xls":
+                        f_path = os.path.join(r, file)
+                        TempName = all_image_name[idx]
+                        for i in range(len(TempName)):
+                            grp = TempName[i]
+                            path_split = process.split(os.sep)
 
-                        filename = grp
-                        initTempDate = path_split[-3]
-                        date = datetime.datetime.strptime(initTempDate, '%Y%m%d').date()
-                        microscope = f'{path_split[-5]} : {path_split[-4]}'
-                        '''
-                        for fn in lf_name:
-                            if fn in grp:
-                                fn2 = fn.replace(' ','')
-                        '''
+                            filename = grp
+                            initTempDate = path_split[-3]
+                            date = datetime.datetime.strptime(initTempDate, '%Y%m%d').date()
+                            microscope = f'{path_split[-5]} : {path_split[-4]}'
+                            '''
+                            for fn in lf_name:
+                                if fn in grp:
+                                    fn2 = fn.replace(' ','')
+                            '''
 
-                        data = pd.read_csv(f_path, sep = "\t", header=None, names=range(8))
-                        #data = pd.read_csv(f_path,
-                        data = data.iloc[:, :-1] # Drop the last column
+                            data = pd.read_csv(f_path, sep = "\t", header=None, names=range(8))
+                            #data = pd.read_csv(f_path,
+                            data = data.iloc[:, :-1] # Drop the last column
 
-                        table_names = ["Ratios", "Raw Ratios", "Pixel shift", "Calibrated distances (in µm)", "Raw calibrated distancesµm)"]
-                        groups = data[0].isin(table_names).cumsum()
-                        tables = {g.iloc[0,0]: g.iloc[1:] for k,g in data.groupby(groups)} #dictionnary of each selected table 
+                            table_names = ["Ratios", "Raw Ratios", "Pixel shift", "Calibrated distances (in µm)", "Raw calibrated distancesµm)"]
+                            groups = data[0].isin(table_names).cumsum()
+                            tables = {g.iloc[0,0]: g.iloc[1:] for k,g in data.groupby(groups)} #dictionnary of each selected table 
 
-                        df_ratios = tables["Raw Ratios"]
-                        df_distances = tables["Raw calibrated distancesµm)"]
+                            df_ratios = tables["Raw Ratios"]
+                            df_distances = tables["Raw calibrated distancesµm)"]
 
-                        # Reindex column name
-                        df_ratios = df_ratios.reset_index(drop=True)
-                        df_ratios.columns = df_ratios.iloc[0]
-                        df_ratios = df_ratios.reindex(df_ratios.index.drop(0)).reset_index(drop=True)
-                        df_ratios.columns.name = None
-
-
-                        df_distances = df_distances.reset_index(drop=True)
-                        df_distances.columns = df_distances.iloc[0]
-                        df_distances = df_distances.reindex(df_distances.index.drop(0)).reset_index(drop=True)
-                        df_distances.columns.name = None
+                            # Reindex column name
+                            df_ratios = df_ratios.reset_index(drop=True)
+                            df_ratios.columns = df_ratios.iloc[0]
+                            df_ratios = df_ratios.reindex(df_ratios.index.drop(0)).reset_index(drop=True)
+                            df_ratios.columns.name = None
 
 
-                        # Reindex row name
-                        df_ratios = df_ratios.set_index('Combinations')
+                            df_distances = df_distances.reset_index(drop=True)
+                            df_distances.columns = df_distances.iloc[0]
+                            df_distances = df_distances.reindex(df_distances.index.drop(0)).reset_index(drop=True)
+                            df_distances.columns.name = None
 
-                        df_distances = df_distances.set_index('Combinations')
+
+                            # Reindex row name
+                            df_ratios = df_ratios.set_index('Combinations')
+
+                            df_distances = df_distances.set_index('Combinations')
 
 
-                        # Create dataframe
-                        CombList = df_ratios.columns
-                        for comb in CombList:
-                            comb_val_ratio = df_ratios.loc[grp, comb]
-                            comb_val_dist = df_distances.loc[grp, comb]
+                            # Create dataframe
+                            CombList = df_ratios.columns
+                            for comb in CombList:
+                                comb_val_ratio = df_ratios.loc[grp, comb]
+                                comb_val_dist = df_distances.loc[grp, comb]
 
-                            TempDataList = pd.DataFrame({'Date':[date], "Microscope":[microscope], "Image Name":[grp], "Combination":[comb], 'Distances (µm)':[comb_val_dist], 'Ratios':[comb_val_ratio]})
-                            DF_coreg = pd.concat([DF_coreg,TempDataList])
+                                TempDataList = pd.DataFrame({'Date':[date], "Microscope":[microscope], "Image Name":[grp], "Combination":[comb], 'Distances (µm)':[comb_val_dist], 'Ratios':[comb_val_ratio]})
+                                DF_coreg = pd.concat([DF_coreg,TempDataList])
 
-                        TempDataList2 = pd.DataFrame({'Date':[date], "Microscope":[microscope], "Image Name":[grp]})
-                        DF_coreg_noComb = pd.concat([DF_coreg_noComb,TempDataList2])
-                        #DF_coreg_noComb  = DF_coreg_noComb.groupby(['Date', 'Image Name']).size().reset_index(name='n')
-                        DF_coreg_noComb2 = DF_coreg_noComb.groupby(['Date']).size().reset_index(name='n')
+                            TempDataList2 = pd.DataFrame({'Date':[date], "Microscope":[microscope], "Image Name":[grp]})
+                            DF_coreg_noComb = pd.concat([DF_coreg_noComb,TempDataList2])
+                            #DF_coreg_noComb  = DF_coreg_noComb.groupby(['Date', 'Image Name']).size().reset_index(name='n')
+                            DF_coreg_noComb2 = DF_coreg_noComb.groupby(['Date']).size().reset_index(name='n')
+                            time.sleep(.005)
+                                        bar()
                         
-        idx += 1
+            idx += 1
                                 
     DF_coreg.reset_index(drop=True, inplace=True)
     
