@@ -332,8 +332,6 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
             else:
                 symbol = '<b>***</b>'
             
-            
-            
 
             fig.add_annotation(dict(font=dict(size=sz), 
                                     x=X, y=float(Y),
