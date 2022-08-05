@@ -322,28 +322,32 @@ def create_box(df, param, table_column_param, med_column_param, im_path,
             t, p = stats.ttest_ind(TempDF_1[table_column_param], TempDF_2[table_column_param], equal_var=False)
             sz = 20
 
+            
             if p >= 0.05:
-                symbol = '<sup><sup><b>ns</b></sup></sup>'
+                symbol = '<b>ns</b>'
                 sz = 30
             elif p >= 0.01: 
-                symbol = '<sup><b>*</b></sup>'
+                symbol = '<b>*</b>'
             elif p >= 0.001:
-                symbol = '<sup><b>**</b></sup>'
+                symbol = '<b>**</b>'
             else:
-                symbol = '<sup><b>***</b></sup>'
-                
+                symbol = '<b>***</b>'
+            
+            
+            
 
             fig.add_annotation(dict(font=dict(size=sz), 
                                     x=X, y=float(Y),
                                     text=symbol,
                                     showarrow=False,
                                     arrowhead=1,
+                                    yanchor='bottom',
                                     xref='x1',
                                     yref='y' + str(nb_listAllComb)))
             
         nb_listAllComb -= 1
     
-    
+
     fig.show()
     
     if result == 'Yes':
