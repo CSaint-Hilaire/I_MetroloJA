@@ -7,7 +7,6 @@ import pandas as pd
 from pathlib import Path
 
 from alive_progress import alive_bar
-from tkinter import filedialog as fd
 from PyPDF2 import PdfFileMerger
 from functools import reduce
 from scipy import stats
@@ -517,8 +516,6 @@ def select_param(button_boxplot, button_final_param, box_layout=box_layout):
     print('\n')
     text2 = '2. Check all the measurements you want to plot'
     Lab2 = widgets.HTML(value = f"<b><font color='green', size='5'>{text2}</b>")
-    
-    
     Lab_box2 = widgets.HBox([Lab2],layout=box_layout)
     display(Lab_box2)
     
