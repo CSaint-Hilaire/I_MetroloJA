@@ -1,6 +1,6 @@
 <picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/MetroloJA_logo_black.png">
- <img alt="light-logo" src="https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/MetroloJA_logo_white.png">
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/MetroloJA_logo_black.png">
+ <img alt="light-logo" src="https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/MetroloJA_logo_white.png">
 </picture>
 
 A guide for time-tracking metrology analyses of light microscopes, after using the ImageJ MetroloJ_QC plugin. :tada:
@@ -20,33 +20,56 @@ The notebook opens in an executable environment from [Binder](https://mybinder.r
 
 
 ### Usage
-After loading, this web page appears :
+After loading, this Jupyter notebook appears :
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_1.png) 
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_1.png) 
+
+To access the space where all folders and files are located, go to the "File" tab and click on "Open..." :
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_2.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_3.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_3bis.png)
+
+And this new tab opens :
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_4.png)
+
+You will be able to upload your analysis folder from MetroloJ_QC :
+ * Click on the "Upload" button and select the folder that must first be compressed in .zip format :
+ 
+ ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_5.png)
+ 
+ * Your zip file appears in your environment. Click on the blue "Upload" button :
+ 
+ ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_6.png)
+ 
+Here, your analysis data is available. You can then go back to the Jupyter notebook and run the code for analysis, or open an HTML page so that only the code outputs are visible and not the code itself.
+
+To do this, always in the Jupyter notebook, press the "voilà" button : 
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_7.png)
+
+A new tab opens. This is an HTML page with only the code outputs :
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_8.png)
 
 Click on the green button and make following selections : 
 1. Select the type of analyze
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_2.png) ![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_2bis.png)
+![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_2.png) ![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_2bis.png)
 
 2. Select the input folder which contains MetroloJ_QC's **Processed** folder for each acquisition date
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_3.png)
+![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_3.png)
 
 3. Select all desired measurement types
 
 In this example, the resolution (FWHM), the fitting between raw data and a Gaussian (R2) and the signal to background ratio (SBR) are selected  
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_4.png) ![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_5.png)
+![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_4.png) ![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_5.png)
 
 4. Indicate if you want to save your boxplot
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_6.png)
+![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_6.png)
 
 5. If **yes**, select your output folder 
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_7.png)
+![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_7.png)
 
 At the end, all boxplot are displayed on the web page, save or not according to your selection.
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA/blob/main/images/usage_8.png)
+![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_8.png)
