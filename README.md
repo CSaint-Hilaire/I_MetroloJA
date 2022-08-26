@@ -48,7 +48,7 @@ A new tab opens. This is an HTML page with only the code outputs :
 ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_8.png)
 
 Now, whether on the Jupyter notebook or on the HTML page, process the analysis data according to the following instructions : 
-1. Select your input file. This is the zip file you imported. Next, press "Select" button :
+1. Select your input file. This is the zip file you imported :
 
 ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_9.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_9bis.png)
 
