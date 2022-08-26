@@ -90,4 +90,4 @@ All boxplot are displayed on the HTML page or on the Jupyter notebook output, sa
 
 If you have chosen to save the plots in PDF, then go back to the folder tab, which was opened previously, and go to the "RESULT" folder : 
 
-![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_4.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_17.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_17bis.png)
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_18.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_17.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_17bis.png)
