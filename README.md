@@ -66,11 +66,15 @@ In this example, the resolution (FWHM), the ratio between measured and theoretic
 
 ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_12.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_12bis.png)
 
- a. First click on "Get Selected!"
- b. Then click on "Send!"
- c. Finally click on "Run!"
-
-![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_13.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_13bis.png)
+  a. First click on "Get Selected!"
+  
+  ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_13.png)
+  
+  b. Then click on "Send!"
+  
+  ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_13bis.png)
+  
+  c. Finally click on "Run!"
 
 4. Indicate if you want to save your boxplot :
 
