@@ -47,29 +47,43 @@ To do this, always in the Jupyter notebook, press the "voilà" button :
 A new tab opens. This is an HTML page with only the code outputs :
 ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_8.png)
 
-Click on the green button and make following selections : 
-1. Select the type of analyze
+Now, whether on the Jupyter notebook or on the HTML page, process the analysis data according to the following instructions : 
+1. Select your input file. This is the zip file you imported :
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_2.png) ![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_2bis.png)
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_9.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_9bis.png)
 
-2. Select the input folder which contains MetroloJ_QC's **Processed** folder for each acquisition date
+2. Then press the big green button after selecting your zip file :
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_3.png)
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_10.png)
 
-3. Select all desired measurement types
+3. Select the type of analysis performed. Then press "OK!" :
 
-In this example, the resolution (FWHM), the fitting between raw data and a Gaussian (R2) and the signal to background ratio (SBR) are selected  
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_11.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_11bis.png)
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_4.png) ![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_5.png)
+4. Select all desired measurement types :
 
-4. Indicate if you want to save your boxplot
+In this example, the resolution (FWHM), the ratio between measured and theoretical data and the signal to background ratio (SBR) are selected  
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_6.png)
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_12.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_12bis.png)
 
-5. If **yes**, select your output folder 
+ a. First click on "Get Selected!"
+ b. Then click on "Send!"
+ c. Finally click on "Run!"
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_7.png)
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_13.png) ![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_13bis.png)
 
-At the end, all boxplot are displayed on the web page, save or not according to your selection.
+4. Indicate if you want to save your boxplot :
 
-![Voilà Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_8.png)
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_14.png)
+
+5. To complete, press on the orange "Show Boxplot!" button :
+
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_15.png)
+
+All boxplot are displayed on the HTML page or on the Jupyter notebook output, save (The folder and PDF file name is displayed At the very bottom of the HTML page or boxplots in the case of the Jupyter notebook) or not according to your selection.
+
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_16.png)
+
+If you have chosen to save the plots in PDF, then go back to the folder tab, which was opened previously, and go to the "RESULT" folder : 
+
+![Jupyter Page](https://github.com/CSaint-Hilaire/MetroloJA_Binder/blob/main/images/usage_17.png)
